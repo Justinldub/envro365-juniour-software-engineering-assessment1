@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>	
+<meta charset="ISO-8859-1">
+<title>Enviro365 Investments - Index</title>
+ <link rel="stylesheet" href="css/style.css" type="text/css">
+<link href="css/bootstrap.min.css" rel ="stylesheet" type="text/css" />
+<link href="css/font-awesome.min.css" rel ="stylesheet" type="text/css" />
+</head>
+<body>
+	<div class="navbar">
+		<p><a href = "index.html" class="brand">Enviro365  </a> <em style="color:blue">	- Investment Services</em></p>
+	</div>
+	<div class = "main">
+	
+	<a href = "/add-investor.html" class = "btn btn-link"><i class = "fa fa-plus"></i> Add New Inverstor</a> | <a href = "/create-product.html" class = "btn btn-link"><i class = "fa fa-plus"></i> Create new product</a> | <a href = "/create-notice.html" class = "btn btn-link"><i class = "fa fa-plus"></i> Create Notice</a> <hr/>
+		<div class = "holder col-lg-12">
+			
+				<div class="search col-lg-3">
+					<form id = "search" class = "form-group">
+						<span class = "badge badge-dark mr-1">Search</span>
+						<input id = "id" class = "form-control text-center" type="text" placeholder="Enter ID" />
+						<button type="submit" class = "btn btn-dark btn-round ml-1"><i class = "fa fa-search"></i></button>	
+					</form>
+					
+				</div>
+				<div class = "content">
+				
+				
+				
+				<div class="personal-info">
+					<p>Personal Information</p><hr/>
+					<div>
+						<h6>FirstName</h6>
+						<span id = "first_name" class="badge badge-dark"></span>
+					</div>
+				
+					<div>
+						<h6>Surname</h6>
+						<span id = "surname" class="badge badge-dark"></span>
+					</div>
+						<div>
+						<h6>Date Of Birth</h6>
+						<span id = "date_of_birth" class="badge badge-dark"></span>
+					</div>
+				
+					<div class="">
+						<h6>Identity Number</h6>
+						<span id = "id_number" class="badge badge-dark"></span>
+					</div>
+				
+				</div>
+					
+				<div class="contact-info">
+					<p>Contact Information</p><hr/>
+					<div>
+						<h6>Tel+</h6>
+						<span id = "contact_numbers" class="badge badge-dark"></span>
+					</div>
+				
+					<div>
+						<h6>Email</h6>
+						<span id = "email" class="badge badge-dark"></span>
+				
+				</div>
+					<div class = "address">
+					<p>Address Information</p><hr/>		
+					<div>
+						<h6>Street number</h6>
+						<span id = "street_number" class="badge badge-dark"></span>
+					</div>
+				
+					<div>
+						<h6>Surburb</h6>
+						<span id = "suburb" class="badge badge-dark"></span>
+					</div>
+						<div>
+						<h6>Town</h6>
+						<span id = "town" class="badge badge-dark"></span>
+					</div>
+				
+					<div class="">
+						<h6>Country</h6>
+						<span id = "country" class="badge badge-dark"></span>
+					</div>
+					<div class="code">
+						<h6>Code</h6>
+						<span id = "code" class="badge badge-dark"></span>
+					</div>
+					<hr>
+			
+				
+					</div>	
+						
+													
+				</div>
+				
+				
+				
+		</div>
+	
+	
+	</div>
+	<div class=" table-holder col-lg-10">
+						<p>List Of Investments</p>
+						<table class = "table table-bordered">
+				
+							<tbody>
+								<tr id = "tr" class="p-4 d-inline">
+									
+								</tr>
+							</tbody>
+						</table>
+	</div>	<footer>
+		<p>Copyright 2023 All rights reserved -  <a href ="http://www.github.com/Justinldub">Justin Dube</a></p>
+	</footer>
+	
+<script src="js/jquery-3.3.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+
+<script>
+	$(document).ready(function(){
+		$("#search").submit(function(event){
+			event.preventDefault();
+			
+			let id = $("#id").val();
+			let products = [];
+			
+			$.ajax({
+				url:"http://localhost:8080/api/get-investor-by-identity-number/"+id,
+				type:"get",
+				dataType:"json",
+				success: function(data){
+				//console.log(data);	
+				$("#first_name").text(data.first_name);
+				$("#surname").text(data.surname);
+				$("#date_of_birth").text(data.date_of_birth);
+				$("#id_number").text(data.id_number);
+				
+				$("#contact_numbers").text(data.contact_numbers);
+				$("#email").text(data.email);
+				
+				$("#street_number").text(data.address.street_number);
+				$("#suburb").text(data.address.suburb);
+				$("#town").text(data.address.town);
+				$("#country").text(data.address.country);
+				$("#code").text(data.address.code);
+				
+				products = data.products;
+				$("#tr").appendHtml;
+				for(var i = 0 ; i <= products.length -1; i++){
+					//console.log(products[i].product_name);
+					var product_name = $('<th></th>');
+					product_name.attr('value',products[i].product_name).text(products[i].product_name);
+					$("#tr").append(product_name);
+					
+					
+					var product_type = $('<th></th>');
+					product_type.attr('value',products[i].product_type).text(products[i].product_type);
+					$("#tr").append(product_type);
+					
+					var start_date = $('<th></th>');
+					start_date.attr('value',products[i].start_date).text(products[i].start_date);
+					$("#tr").append(start_date);
+					
+					var investment_amount = $('<th></th>');
+					investment_amount.attr('value',products[i].investment_amount).text(products[i].investment_amount);
+					$("#tr").append(investment_amount);
+					
+					var bal = $('<th></th>');
+					bal.attr('value',products[i].bal).text(products[i].bal);
+					$("#tr").append(bal);
+					
+			
+					var download = $('<button></button>');
+					download.attr('class',"btn btn-info").text("Get Statement");
+					
+					$("#tr").append(download);
+					
+									
+					
+					
+				}
+				
+					download.click(function(){
+						// Get statement to be handled
+					});
+				},
+				error: function(err){
+					console.log(err);
+				},
+				
+				
+			});
+			
+		
+		});
+		
+		
+		
+	});
+</script>
+
+
+</body>
+</html>

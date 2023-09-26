@@ -1,0 +1,11 @@
+com\envro\grad001\assessment\justindube\web\model\Product.class
+com\envro\grad001\assessment\justindube\web\repo\WithdrawalsRepo.class
+com\envro\grad001\assessment\justindube\web\repo\ProductRepo.class
+com\envro\grad001\assessment\justindube\web\model\Investor.class
+com\envro\grad001\assessment\justindube\web\Main.class
+com\envro\grad001\assessment\justindube\web\model\Withdrawal.class
+com\envro\grad001\assessment\justindube\web\service\InvestmentService.class
+com\envro\grad001\assessment\justindube\web\model\Gender.class
+com\envro\grad001\assessment\justindube\web\model\Address.class
+com\envro\grad001\assessment\justindube\web\repo\InvestorRepo.class
+com\envro\grad001\assessment\justindube\web\model\ProductType.class

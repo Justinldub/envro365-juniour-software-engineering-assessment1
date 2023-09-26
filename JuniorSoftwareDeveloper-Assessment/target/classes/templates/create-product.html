@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>	
+<meta charset="ISO-8859-1">
+<title>Enviro365 Investments - create product</title>
+ <link rel="stylesheet" href="css/style.css" type="text/css">
+<link href="css/bootstrap.min.css" rel ="stylesheet" type="text/css" />
+<link href="css/font-awesome.min.css" rel ="stylesheet" type="text/css" />
+</head>
+<body>
+	<div class="navbar">
+		<p><a href = "index.html" class="brand">Enviro365  </a> <em style="color:blue">	- Investment Services</em></p>
+	</div>
+	
+		
+		
+				<div class = "add-form col-lg-8">
+					<form id = "form" >
+						<label>Enter investor ID-Number</label>
+						<input id = "id" type="text" class="form-control" />
+						<hr/>
+						<label>Product</label>
+						<select id = "product-names" name = "product_name" class = "form-control">
+							
+						</select>
+						<hr/>
+						<label>Product Type</label>
+						<select id = "product-types" name = "product_type" class = "form-control">
+							
+						</select>
+						<hr/>
+						<label>Investment Amount</label>
+						<input id = "amount" name = "investment_amount" type="text" class="form-control" />
+						<hr/>
+						<button type ="submit" class="btn btn-dark btn-block">Create Product</button>			
+					</form>
+				</div>
+	
+	<footer>
+		<p>Copyright 2023 All rights reserved -  <a href ="http://www.github.com/Justinldub">Justin Dube</a></p>
+	</footer>
+	
+	</div>	
+	
+<script src="js/jquery-3.3.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+
+<script>
+	$(document).ready(function(){
+		$("#form").submit(function(event){
+			event.preventDefault();
+			
+			let product = {
+				product_name : $("#product-names").val(),
+				product_type : $("#product-types").val(),
+				investment_amount : $("#amount").val(),
+			}
+			$.ajax({
+				url :"http://localhost:8080/api/create-product/"+$("#id").val(),
+				dataType:"json",
+			 	headers:{
+					 "Content-Type" : "application/json"
+				 },
+				type : "post",
+				data:JSON.stringify(product),
+				success : function(data){
+					console.log(data);
+				},
+				error : function(err){
+					console.log(err);
+				}
+			});
+		});
+		
+		$.ajax({
+    		url:"http://localhost:8080/api/get-product-types",
+    		type:"GET",
+    		dataType:"json",
+    		success:function(data){
+    		//	console.log(data);
+    			$("#product-types").appendHtml;
+    			for(var i = 0;i <= data.length - 1; i++){
+    				console.log(data[i]);
+    				var opt = $('<option></option>');
+    				opt.attr('value',data[i]).text(data[i]);
+    				$("#product-types").append(opt);
+    				
+    			}
+    			
+    		},
+    		error:function(message){
+    			console.log(message);
+    		}
+    	});
+		
+			$.ajax({
+    		url:"http://localhost:8080/api/get-product-names",
+    		type:"GET",
+    		dataType:"json",
+    		success:function(data){
+    		//	console.log(data);
+    			$("#product-names").appendHtml;
+    			for(var i = 0;i <= data.length - 1; i++){
+    				console.log(data[i]);
+    				var opt = $('<option></option>');
+    				opt.attr('value',data[i]).text(data[i]);
+    				$("#product-names").append(opt);
+    			}
+    			
+    		},
+    		error:function(message){
+    			console.log(message);
+    		}
+    	});	
+	});
+</script>
+
+</body>
+</html>
+
+
+
+

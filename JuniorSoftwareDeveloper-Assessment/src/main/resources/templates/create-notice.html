@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>	
+<meta charset="ISO-8859-1">
+<title>Enviro365 Investments - create notice</title>
+ <link rel="stylesheet" href="css/style.css" type="text/css">
+<link href="css/bootstrap.min.css" rel ="stylesheet" type="text/css" />
+<link href="css/font-awesome.min.css" rel ="stylesheet" type="text/css" />
+</head>
+<body>
+	<div class="navbar">
+		<p><a href = "index.html" class="brand">Enviro365  </a> <em style="color:blue">	- Investment Services</em></p>
+	</div>
+	
+		
+		
+				<div class = "add-form col-lg-8">
+					<form id = "form" >
+						<label>Enter product ID</label>
+						<input id = "id" type="text" class="form-control" />
+						<hr/>
+						<label>Withdrawal amount</label>
+						<input id = "amount" type="text" class="form-control" />
+						<hr/>
+						<p>Banking information</p>
+						<label>Bank Branch</label>
+						<select id = "bank-branches" name = "product_name" class = "form-control">
+							
+						</select>
+						<label>Account Holder</label>
+						<input name = "account_holder" id = "account_holder"  type = "text" placeholder="eg) John Doe" class = "form-control" />
+						<label>Account Number</label>
+						<input name = "account_number" id = "account_number" type = "text" class="form-control" />
+					
+						<button type ="submit" class="btn btn-dark btn-block">Create Withdrawal</button>			
+					</form>
+				</div>
+	
+	<footer>
+		<p>Copyright 2023 All rights reserved -  <a href ="http://www.github.com/Justinldub">Justin Dube</a></p>
+	</footer>
+	
+	</div>	
+	
+<script src="js/jquery-3.3.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+
+<script>
+	$(document).ready(function(){
+		$("#form").submit(function(event){
+			event.preventDefault();
+			let bank_details = {
+				account_holder : $("#account_holder").val(),
+				account_number : $("#account_number").val(),
+				branch : $("#bank-branches").val()
+			}
+			$.ajax({
+				url :"http://localhost:8080/api/create-notice/"+$("#id").val()+"/"+$("#amount").val(),
+				dataType:"json",
+			 	headers:{
+					 "Content-Type" : "application/json"
+				 },
+				type : "post",
+				data:JSON.stringify(bank_details),
+				success : function(data){
+					console.log(data);
+				},
+				error : function(err){
+					console.log(err);
+				}
+			});
+		});
+		
+		$.ajax({
+    		url:"http://localhost:8080/api/get-bank-branches",
+    		type:"GET",
+    		dataType:"json",
+    		success:function(data){
+    		//	console.log(data);
+    			$("#bank-branches").appendHtml;
+    			for(var i = 0;i <= data.length - 1; i++){
+    				console.log(data[i]);
+    				var opt = $('<option></option>');
+    				opt.attr('value',data[i]).text(data[i]);
+    				$("#bank-branches").append(opt);
+    				
+    			}
+    			
+    		},
+    		error:function(message){
+    			console.log(message);
+    		}
+    	});
+		
+	});
+</script>
+
+</body>
+</html>
+
+
+
+
