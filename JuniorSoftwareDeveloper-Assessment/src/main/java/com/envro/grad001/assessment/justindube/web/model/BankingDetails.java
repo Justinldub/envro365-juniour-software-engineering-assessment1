@@ -38,6 +38,56 @@ public class BankingDetails {
 	
 	@OneToOne(mappedBy = "banking_details")
 	private Withdrawal withdrawal;
+
+
+	public int getId() {
+		return id;
+	}
+
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+
+	public String getHolder() {
+		return holder;
+	}
+
+
+	public void setHolder(String holder) {
+		this.holder = holder;
+	}
+
+
+	public String getAccount_number() {
+		return account_number;
+	}
+
+
+	public void setAccount_number(String account_number) {
+		this.account_number = account_number;
+	}
+
+
+	public BankBranches getBranch() {
+		return branch;
+	}
+
+
+	public void setBranch(BankBranches branch) {
+		this.branch = branch;
+	}
+
+
+	public Withdrawal getWithdrawal() {
+		return withdrawal;
+	}
+
+
+	public void setWithdrawal(Withdrawal withdrawal) {
+		this.withdrawal = withdrawal;
+	}
 	
 	
 	

@@ -1,5 +1,10 @@
 package com.envro.grad001.assessment.justindube.web.controller;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.Date;
 import java.util.List;
 
@@ -14,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.supercsv.io.CsvBeanWriter;
+import org.supercsv.prefs.CsvPreference;
 
 import com.envro.grad001.assessment.justindube.web.model.BankBranches;
 import com.envro.grad001.assessment.justindube.web.model.Gender;
@@ -24,6 +31,8 @@ import com.envro.grad001.assessment.justindube.web.model.ProductType;
 import com.envro.grad001.assessment.justindube.web.model.Withdrawal;
 import com.envro.grad001.assessment.justindube.web.repo.ProductRepo;
 import com.envro.grad001.assessment.justindube.web.service.InvestmentService;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 public class InvestmentControllerRest {
@@ -104,8 +113,13 @@ public class InvestmentControllerRest {
 			
 		case RETIREMENT:
 			Investor investor = product.getInvestor();
-			
-			if(amount > nintyPess) {
+			String dob = investor.getDate_of_birth();		
+			LocalDate date =  LocalDate.parse(dob);
+			LocalDate now = LocalDate.now();
+			if(Period.between(date, now).getYears() < 65) {
+				return new ResponseEntity<>("Minimum age to process the withdrawal is not reached, Withdrawal Unsuccessful",HttpStatus.NOT_ACCEPTABLE);
+			}
+			else if(amount > nintyPess) {
 				return new ResponseEntity<>("Can not withdraw more than 90% of the current balance",HttpStatus.NOT_ACCEPTABLE);
 			}
 			else if(amount > currentBal) {
@@ -124,4 +138,29 @@ public class InvestmentControllerRest {
 		
 		return null;
 	}
+	
+	@GetMapping(BASE_URL+"/get-statement/{id}")
+	public void exportToCsv(HttpServletResponse response, @PathVariable int id) throws IOException {
+		response.setContentType("text/csv");
+			DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+	        String currentDateTime = dateFormatter.format(new Date());
+	        String headerKey = "Content-Disposition";
+	        String headerValue = "attachment; filename=statement_" + currentDateTime + ".csv";
+	        response.setHeader(headerKey, headerValue);
+	        
+	        
+	        CsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
+	        String[] csvHeader = {"Amount", "Date", "Product"};
+	        String[] nameMapping = {"amount", "date", "product"};
+	        csvWriter.writeHeader(csvHeader);
+	         
+	        for (Withdrawal withdrawal : is.getWithdrawalsByProduct(id)) {
+	            csvWriter.write(withdrawal, nameMapping);
+	        }
+	         
+	        csvWriter.close();
+	}
+	
+	
+	
 }

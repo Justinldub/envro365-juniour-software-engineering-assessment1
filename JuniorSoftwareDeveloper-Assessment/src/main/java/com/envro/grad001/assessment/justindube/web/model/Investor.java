@@ -65,6 +65,19 @@ public class Investor {
 	@Column()
 	private String contact_numbers;
 
+	@Column
+	private Gender gender;
+	
+	
+	
+	public Gender getGender() {
+		return gender;
+	}
+
+	public void setGender(Gender gender) {
+		this.gender = gender;
+	}
+
 	public int getId() {
 		return id;
 	}

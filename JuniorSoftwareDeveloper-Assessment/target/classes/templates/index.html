@@ -174,17 +174,26 @@
 			
 					var download = $('<button></button>');
 					download.attr('class',"btn btn-info").text("Get Statement");
-					
 					$("#tr").append(download);
-					
 									
-					
+					download.click(function(event){
+						// Get statement to be handled
+						$.ajax({
+							url : "http://localhost:8080/api/get-statement/"+products[i].id,
+							type: "get",
+							dataType:"json",
+							sucess: function(){
+								console.log("File will download shortly");
+							},
+							error :function(err){
+								console.log(err);
+							}
+						});
+					});
 					
 				}
 				
-					download.click(function(){
-						// Get statement to be handled
-					});
+					
 				},
 				error: function(err){
 					console.log(err);

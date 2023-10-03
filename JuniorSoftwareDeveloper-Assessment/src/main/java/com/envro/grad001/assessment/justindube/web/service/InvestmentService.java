@@ -2,12 +2,14 @@ package com.envro.grad001.assessment.justindube.web.service;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.envro.grad001.assessment.justindube.web.model.Investor;
@@ -74,20 +76,31 @@ public class InvestmentService {
 	}
 	
 	public Withdrawal createWithdrawalnotice(Withdrawal withdrawal , Product product) {
-		
-		
-		
+			
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
 		withdrawal.setDate(format.format(new Date()));
 		withdrawal.setProduct(product);
+		withdrawal.setBal(product.getBal() - withdrawal.getAmount());
 		wr.save(withdrawal);
 		
 		List<Withdrawal> withdrawals = product.getWithdrawals();
 		withdrawals.add(withdrawal);
+		product.setBal(withdrawal.getBal());
 		product.setWithdrawals(withdrawals);
 		pr.saveAndFlush(product);
 		
 		return withdrawal;
 	}
 	
+	public List<Withdrawal> getWithdrawalsByProduct(int product_id){
+		Product product = pr.getReferenceById(product_id);
+		List<Withdrawal> list = wr.findAll(Sort.by("date"));
+		List<Withdrawal> sortedList = new ArrayList<>();
+		for(Withdrawal w : list) {
+			if(w.getProduct().getId() == product.getId()) {
+				sortedList.add(w);
+			}
+		}
+		return sortedList;
+	}
 }

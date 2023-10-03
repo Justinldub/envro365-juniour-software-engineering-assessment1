@@ -38,6 +38,9 @@ public class Withdrawal {
 	@Column
 	private double amount;
 	
+	@Column
+	private double bal;
+	
 	@ManyToOne()
 	@JoinColumn(name = "product_id",nullable = false)
 	private Product product;
@@ -77,6 +80,22 @@ public class Withdrawal {
 
 	public void setDate(String date) {
 		this.date = date;
+	}
+
+	public double getBal() {
+		return bal;
+	}
+
+	public void setBal(double bal) {
+		this.bal = bal;
+	}
+
+	public BankingDetails getBanking_details() {
+		return banking_details;
+	}
+
+	public void setBanking_details(BankingDetails banking_details) {
+		this.banking_details = banking_details;
 	}
 	
 	
